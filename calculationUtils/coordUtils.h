@@ -2,25 +2,34 @@
 #define __COORDUTILS__
 #include "../constants/numbers.h"
 #include "../constants/types.h"
+#include "../glutils/libUtils.h"
 
-void calculateCoords(short x, 
-					 short y, 
-					 float &vx1, 
-					 float &vx2, 
-					 float &vy1, 
-					 float &vy2) {
+void calculateCoords(short x, short y, float &vx1, float &vx2, float &vy1, float &vy2) {
 	short xCoeff = x - (rowBoxNumbers / 2);
 	short yCoeff = y - (columnBoxNumbers / 2);
 	vx1 = xCoeff * (sideHorizontalLength + rubberHThickness);
 	vy1 = yCoeff * (sideVerticalLength + rubberVThickness);
-	vx2 = xCoeff * (sideHorizontalLength + rubberHThickness) + 
-		sideHorizontalLength;
-	vy2 = yCoeff * (sideVerticalLength + rubberVThickness) + 
-		sideVerticalLength;	
+	vx2 = xCoeff * (sideHorizontalLength + rubberHThickness) + sideHorizontalLength;
+	vy2 = yCoeff * (sideVerticalLength + rubberVThickness) + sideVerticalLength;
 }
 
-// todo: In order to use with 
-// glCopyPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum type);
+void setUpTriangleCoords(float &vx1, float &vx2, float &vx3, float &vy1, float &vy2, float &vy3) {
+	vx1 = -(columnBoxNumbers/8) * (sideHorizontalLength + rubberHThickness);
+	vx2 = -vx1;
+	vx3 = 0.0f;
+	vy1 = vy2 = -(rowBoxNumbers/8) * (sideVerticalLength + rubberHThickness);
+	vy3 = -vy1;
+}
+
+void setUpsideTriangleCoords(float &vx1, float &vx2, float &vx3, float &vy1, float &vy2, float &vy3) {
+	vx1 = -(columnBoxNumbers/8) * (sideHorizontalLength + rubberHThickness);
+	vx2 = -vx1;
+	vx3 = 0.0f;
+	vy1 = vy2 = (rowBoxNumbers/8) * (sideVerticalLength + rubberHThickness);
+	vy3 = -vy1;
+}
+
+// Written in order to use with glCopyPixels(GLint x, GLint y, GLsizei width, GLsizei height, GLenum type);
 pair<float, float> getOrigin() {
 	float ox = -(rowBoxNumbers/2) * (sideHorizontalLength+rubberHThickness);
 	float oy = -(columnBoxNumbers/2) * (sideVerticalLength+rubberVThickness);
@@ -28,9 +37,8 @@ pair<float, float> getOrigin() {
 }
 
 bool darkFilled(pair<short, short> coord) {
-	if (coord.first == -1 || coord.second == -1) {
+	if (coord.first == -1 || coord.second == -1)
 		return true;
-	}
 	
 	return false;
 }
@@ -55,6 +63,14 @@ void freeResources() {
 	free(colors);
 	free(marked);
 	free(closures);
+}
+
+short min(short a, short b) {
+	return (a < b) ? a : b;
+}
+
+short max(short a, short b) {
+	return (a > b) ? a : b;
 }
 
 #endif
