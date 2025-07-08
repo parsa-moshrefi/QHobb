@@ -1,22 +1,42 @@
 #ifndef __SCORE__
 #define __SCORE__
 #include "coordUtils.h"
-#include "numbers.h"
+#include "../constants/numbers.h"
 
-// todo: impl vanish & test this method
-float scoreToVanish(pair<short, short> *closure, bool horizontal) {
-	short i, boxNumbers;
-	float score = 0.0f;
-	boxNumbers = horizontal ? rowBoxNumbers : columnBoxNumbers;
-	for (i=0; i<boxNumbers; i++) {
-		if (darkFilled(closure[i])) {
-			return score;
-		}
-		
-		score += scorePerBoxVanish;
+void updateTotalScore(short numberOfclosures) {
+	if (scoresUpdated)
+		return;
+	
+	for (short i = 0; i < numberOfClosures; i++) {
+		totalScore += closures[i].closureCount * getColorScore(closures[i].closureColor);
 	}
 	
-	return score;
+	scoresUpdated = true;
 }
+
+bool checkWinScore() {
+	return totalScore >= winScore;
+}
+
+bool screenIsFilled() {
+	short i,j;
+	for (i=0; i<rowBoxNumbers; i++) {
+		for (j=0; j<columnBoxNumbers; j++) {
+			if (marked[i][j] == false)
+				return false;
+		}
+	}
+	
+	return true;
+}
+
+bool checkLossCondition() {	
+	if (screenIsFilled() && numberOfClosures > 0) {
+		return true;
+	}
+	
+	return false;
+}
+
 
 #endif
