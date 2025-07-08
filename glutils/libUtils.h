@@ -33,30 +33,37 @@ using namespace std;
  *
  **************************/
 
-condition_variable cond_var;
-mutex mtx;
-unique_lock<mutex> unqlck{mtx};
+condition_variable otr_cond_var;
+condition_variable swp_cond_var;
+mutex otrmtx;
+mutex swpmtx;
+unique_lock<mutex> otrlck{otrmtx};
+unique_lock<mutex> swplck{swpmtx};
 HDC *globalHDCPtr;
 
 Color **colors;
 short *heights, renderCount = 0, numberOfClosures;
 bool **marked;
+bool finished = false;
+bool scoresUpdated = false;
+bool readyToVanish = false;
 ClosureHolder *closures;
 BOOL bQuit;
 MSG msg;
+int totalScore = 0;
 
 LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void EnableOpenGL (HWND hWnd, HDC *hDC, HGLRC *hRC);
 void DisableOpenGL (HWND hWnd, HDC hDC, HGLRC hRC);
 
-/************************************************************************
- * Platform angostically forces current process avoid creating additional 
- * threads and processor affinity
+/*******************************************************************************************************
+ * Platform angostically forces current process avoid creating additional threads and processor affinity
  *
- ************************************************************************/
+ *******************************************************************************************************/
 bool force_single_thread() {
 	#ifdef _WIN32
-	DWORD mask = 1;		// Use only the first core
+	// Use only the first core
+	DWORD mask = 1;		
 	if (SetProcessAffinityMask(GetCurrentProcess(), mask) == 0) {
 		// Handle error
 		return false;
@@ -66,10 +73,8 @@ bool force_single_thread() {
 	CPU_ZERO(&cpuset);
 	CPU_SET(0, &cpuset);
 	pthread_t current_thread = pthread_self();
-	if (pthread_setaffinity_np(current_thread, 
-			sizeof(cpu_set_t), &cpuset) != 0) {
-		// Handle error, it could be EPERM which means the calling thread 
-		// does not have the appropriate permission.
+	if (pthread_setaffinity_np(current_thread, sizeof(cpu_set_t), &cpuset) != 0) {
+		// Handle error, it could be EPERM which means the calling thread does not have the appropriate permission.
 		return false;	
 	}
 	
@@ -93,12 +98,12 @@ int getNumberOfThreads() {
 
     DWORD currentProcessId = GetCurrentProcessId();
     do {
-        if (te.dwSize >= FIELD_OFFSET(THREADENTRY32, th32OwnerProcessID) + 
-				sizeof(te.th32OwnerProcessID)) {
+        if (te.dwSize >= FIELD_OFFSET(THREADENTRY32, th32OwnerProcessID) + sizeof(te.th32OwnerProcessID)) {
             if (te.th32OwnerProcessID == currentProcessId) {
                 count++;
             }
         }
+        
         te.dwSize = sizeof(te);
     } while (Thread32Next(hSnapshot, &te));
 
@@ -159,8 +164,7 @@ void EnableOpenGL (HWND hWnd, HDC *hDC, HGLRC *hRC)
     ZeroMemory (&pfd, sizeof (pfd));
     pfd.nSize = sizeof (pfd);
     pfd.nVersion = 1;
-    pfd.dwFlags = PFD_DRAW_TO_WINDOW | 
-      PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
+    pfd.dwFlags = PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL | PFD_DOUBLEBUFFER;
     pfd.iPixelType = PFD_TYPE_RGBA;
     pfd.cColorBits = 24;
     pfd.cDepthBits = 16;
@@ -195,16 +199,13 @@ void customFlush() {
 void customSwapBuffers() {
 	// refer the following link inorder to do this function synchronously
 	// https://chrizog.com/cpp-thread-synchronization#:~:text=With%20C%2B%2B%20threads%20this%20can,function%20on%20the%20condition%20variable.
-	// try to get result by manipulating customFlush
-	// if not, try the third (future) solution. Although this way turns out as 
-	// an async approach; It needs to make callable parameters global and use
-	// creating threads on void function (void) as well.
-	unique_lock<mutex> lock{mtx};
-	cond_var.wait(lock, [](){		
+	// try to get result by manipulating customFlush; if not, try the third (future) solution. Although this way turns out as an async approach; It 
+	// needs to make callable parameters global and use creating threads on void function (void) as well.	
+	swp_cond_var.wait(swplck, [](){
 		return SwapBuffers(*globalHDCPtr);
 	});
 		
-	unqlck.unlock();
+	swplck.unlock();
 }
 
 #endif
