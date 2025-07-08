@@ -9,15 +9,11 @@
 
 using namespace std;
 
-void initScreenVals(short *&heights, 
-					Color **&colors, 
-					bool **&marked, 
-					ClosureHolder *&closures) {
+void initScreenVals() {
 	short i, j;
 	heights = (short*) malloc(sizeof(short) * rowBoxNumbers);
 	marked = (bool**) malloc(sizeof(bool*) * rowBoxNumbers);
-	closures = (ClosureHolder*) malloc(sizeof(ClosureHolder) * 
-									   maxClosuresNumber);
+	closures = (ClosureHolder*) malloc(sizeof(ClosureHolder) * maxClosuresNumber);
 	for (i=0; i<rowBoxNumbers; i++) {
 		heights[i] = (short) getRandomNumber(1, columnBoxNumbers);
 		marked[i] = (bool*) malloc(sizeof(bool) * columnBoxNumbers);
@@ -33,8 +29,8 @@ void initScreenVals(short *&heights,
 	}
 }
 
-void setScreenColors(short *&heights, Color **&colors) {
-	short i,j;
+void setScreenColors() {
+	short i, j;
 	colors = (Color**) malloc(sizeof(Color*) * rowBoxNumbers);
 	for (i=0; i<rowBoxNumbers; i++) {
 		colors[i] = (Color*) malloc(sizeof(Color) * columnBoxNumbers);
@@ -57,8 +53,7 @@ pair<short, short>* nextHorizontalClosure(short *&heights,
 										  bool **&marked) {
 	short i, j, k, column, minHeight;
 	Color pointColor;
-	pair<short, short>* result = (pair<short, short>*) 
-		malloc(sizeof(pair<short, short>) * (rowBoxNumbers + columnBoxNumbers));
+	pair<short, short>* result = (pair<short, short>*) malloc(sizeof(pair<short, short>) * (rowBoxNumbers + columnBoxNumbers));
 	bool found = false;
 	for (i=0; i<rowBoxNumbers-1; i++) {
 		if (i+closureMinVal > rowBoxNumbers)
@@ -117,8 +112,7 @@ pair<short, short>* nextVerticalClosure(short *&heights,
 										bool **&marked) {
 	short i, j, k, row;
 	Color pointColor;
-	pair<short, short>* result = (pair<short, short>*) 
-		malloc(sizeof(pair<short, short>) * (rowBoxNumbers + columnBoxNumbers));
+	pair<short, short>* result = (pair<short, short>*) malloc(sizeof(pair<short, short>) * (rowBoxNumbers + columnBoxNumbers));
 	bool found = false;
 	for (i=0; i<columnBoxNumbers; i++) {
 		for (j=0; j<heights[i]; j++) {
@@ -215,13 +209,7 @@ void addHorizontalCrossClosure(short *heights,
 	do {
 		coord = closure[iterator];
 		color = colors[coord.first][coord.second];
-		addUpDownClosure(coord, 
-						 color, 
-						 heights, 
-						 colors, 
-						 closureCount, 
-						 closure, 
-						 marked);
+		addUpDownClosure(coord, color, heights, colors, closureCount, closure, marked);
 		iterator++;
 	} while (iterator < horizontalClosureCount);
 }
@@ -261,11 +249,7 @@ void addLeftRightClosure(pair<short, short> coord,
 	}
 }
 
-void addVerticalCrossClosure(short *heights,
-							 Color **colors,
-							 short &closureCount,
-							 pair<short, short> *closure,
-							 bool **&marked) {
+void addVerticalCrossClosure(short *heights, Color **colors, short &closureCount, pair<short, short> *closure, bool **&marked) {
 	if (!foundToVanish(closure))
 		return;
 	
@@ -276,49 +260,27 @@ void addVerticalCrossClosure(short *heights,
 	do {
 		coord = closure[iterator];
 		color = colors[coord.first][coord.second];
-		addLeftRightClosure(coord, 
-							color, 
-							colors, 
-							closureCount, 
-							closure, 
-							marked);
+		addLeftRightClosure(coord, color, colors, closureCount, closure, marked);
 		iterator++;
 	} while (iterator < verticalClosureCount);
 }
 
-void addCrossClosure(short *heights,
-					 Color **colors,
-					 short &closureCount,
-					 pair<short, short> *closure,
-					 bool **&marked, 
-					 bool horizontalIsPrior=true) {
+void addCrossClosure(short *heights, Color **colors, short &closureCount, pair<short, short> *closure, bool **&marked, bool horizontalIsPrior=true) {
 	bool checkHorizon = horizontalIsPrior;
 	short currentCount;
 	do {
 		currentCount = closureCount;
 		if (checkHorizon) {
-			addHorizontalCrossClosure(heights, 
-									  colors, 
-									  closureCount, 
-									  closure, 
-									  marked);
+			addHorizontalCrossClosure(heights, colors, closureCount, closure, marked);
 		} else {
-			addVerticalCrossClosure(heights, 
-									colors, 
-									closureCount, 
-									closure, 
-									marked);
+			addVerticalCrossClosure(heights, colors, closureCount, closure, marked);
 		}
 		
 		checkHorizon = !checkHorizon;
 	} while (currentCount != closureCount);
 }
 
-pair<short, short>* nextClosure(short *&heights,
-								Color **&colors,
-								bool **&marked,
-								short &closureCount,
-								bool horizontalIsPrior=true) {
+pair<short, short>* nextClosure(short *&heights, Color **&colors, bool **&marked, short &closureCount, bool horizontalIsPrior=true) {
 	pair<short, short> *closure = NULL;
 	closureCount = 0;
 	if (horizontalIsPrior) {
@@ -327,13 +289,7 @@ pair<short, short>* nextClosure(short *&heights,
 		closure = nextVerticalClosure(heights, colors, closureCount, marked);
 	}
 	
-	addCrossClosure(heights,
-					colors,
-					closureCount,
-					closure,
-					marked,
-					horizontalIsPrior);
-					
+	addCrossClosure(heights, colors, closureCount, closure, marked, horizontalIsPrior);
 	return closure;
 }
 
@@ -342,8 +298,7 @@ void allClosures() {
 	
 	// Appends all hoirzontal closures
 	do {
-		pair<short, short> *coords = 
-			nextClosure(heights, colors, marked, closureCount);
+		pair<short, short> *coords = nextClosure(heights, colors, marked, closureCount);
 		if (!foundToVanish(coords))
 			break;
 		
@@ -355,8 +310,7 @@ void allClosures() {
 	
 	// Appends all vertical closures
 	do {
-		pair<short, short> *coords = 
-			nextClosure(heights, colors, marked, closureCount, false);
+		pair<short, short> *coords = nextClosure(heights, colors, marked, closureCount, false);
 		if (!foundToVanish(coords))
 			break;
 		
@@ -371,6 +325,100 @@ short getNumberOfClosures() {
 	short i = 0;
 	while (closures[i++].closureColor != DARK);	
 	return i-1;
+}
+
+short getColorScore(Color color) {
+
+	switch (color) {
+		case PURPLE:
+			return purpleScore;
+			
+		case YELLOW:
+			return yellowScore;
+			
+		case RED:
+			return redScore;
+		
+		case GREEN:
+			return greenScore;
+			
+		case BLUE:
+			return blueScore;
+			
+		case DARK:
+			return darkScore;
+			
+		default:
+			return zero;
+	}
+}
+
+void clearClosure(ClosureHolder *chPtr) {
+	short ccnt = chPtr->closureCount;
+	chPtr->closureColor = DARK;
+	if (!ccnt)
+		return;
+		
+	for (short idx = 0; idx < ccnt; idx++) {
+		(chPtr->closure[idx]).first = (chPtr->closure[idx]).second = 0;
+	}
+	
+	chPtr->closureCount = 0;
+}
+
+void clearClosures() {
+	short nc = getNumberOfClosures(), idx = 0;
+	while (idx < nc) {
+		clearClosure(closures + idx);
+		idx++;
+	}
+}
+
+void disentangleClosure(ClosureHolder *chPtr) {
+	free(chPtr->closure);
+	chPtr->closure = NULL;
+}
+
+void disentangleClosures() {
+	short idx = getNumberOfClosures();
+	if (!idx)
+		return;
+		
+	do {
+		idx--;
+		disentangleClosure(closures + idx);
+	} while (idx);
+}
+
+// todo: bugfix - First or Last vertical closure element remains intactly while it must have been removed, too.
+void dropAboveCells(short rwIdx, short clIdx) {
+	if (!marked[clIdx][rwIdx])
+		return;
+		
+	short hght = heights[clIdx], idx = rwIdx;
+	while (idx++ < hght) {
+		if (idx == columnBoxNumbers)
+			break;
+			
+		colors[clIdx][idx-1] = colors[clIdx][idx];
+		marked[clIdx][idx-1] = marked[clIdx][idx];
+	}
+	
+	heights[clIdx] = --hght;
+	colors[clIdx][hght-1] = colors[clIdx][idx-1] = DARK;
+	marked[clIdx][hght-1] = marked[clIdx][idx-1] = false;
+}
+
+void dropMarkedCells(short clIdx) {
+	for (short rwIdx = 0; rwIdx < columnBoxNumbers; rwIdx++) {
+		dropAboveCells(rwIdx, clIdx);
+	}
+}
+
+void vanishMarkedOnBoard() {
+	for (short clIdx = 0; clIdx < rowBoxNumbers; clIdx++) {
+		dropMarkedCells(clIdx);
+	}
 }
 
 #endif
