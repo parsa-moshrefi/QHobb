@@ -23,7 +23,6 @@ void rotateTriangle(BOOL &bQuit, MSG &msg, float &theta, HDC &hDC) {
         else
         {
             /* OpenGL animation code goes here */
-
             glClearColor (0.0f, 0.0f, 0.0f, 0.0f);
             glClear (GL_COLOR_BUFFER_BIT);
 
