@@ -5,10 +5,7 @@
 #include "../calculationUtils/coordUtils.h"
 #include "libUtils.h"
 
-void setColorTripleBases(Color color, 
-						 float &rColor, 
-						 float &gColor, 
-						 float &bColor) {
+void setColorTripleBases(Color color, float &rColor, float &gColor, float &bColor) {
 	switch (color) {
 		case PURPLE:
 			rColor = purpleR; gColor = purpleG; bColor = purpleB;
@@ -34,20 +31,18 @@ void setColorTripleBases(Color color,
 			rColor = darkR; gColor = darkG; bColor = darkB;
 			break;
 			
+		case WHITE:
+			rColor = whiteR; gColor = whiteG; bColor = whiteB;
+			break;
+			
 		default:
 			rColor = whiteR; bColor = whiteG; gColor = whiteB;
 			break;
 	}
 }
 
-// WINGDIAPI void APIENTRY glDrawPixels(GLsizei width,GLsizei height,GLenum format,GLenum type,const GLvoid *pixels);
-void drawBoxPixels(/*todo: parameters*/);
-
-void drawBox(short x, 
-			 short y, 
-			 float rColor, 
-			 float gColor, 
-			 float bColor) {
+// todo: use WINGDIAPI void APIENTRY glDrawPixels(GLsizei width,GLsizei height,GLenum format,GLenum type,const GLvoid *pixels); void drawBoxPixels();
+void drawBox(short x, short y, float rColor, float gColor, float bColor) {
 	float vx1, vx2, vy1, vy2;
 	calculateCoords(x, y, vx1, vx2, vy1, vy2);
 	glPushMatrix ();
@@ -92,7 +87,7 @@ void drawCoords(pair<short, short> *&coords, short count, Color color)
 }
 
 void drawClosureOn(ClosureHolder &holder) {	
-	drawCoords(holder.closure, holder.closureCount, holder.closureColor);	
+	drawCoords(holder.closure, holder.closureCount, holder.closureColor);
 }
 
 void drawClosureOff(ClosureHolder &holder) {
@@ -117,12 +112,11 @@ void blinkClosures(short count,
 	if (count == 0)
 		return;
 
-	// 1wtodo: explict thread creation for customSwapBuffer as rendering_thread
-	// and screenlayout as manipulator_thread. Go on in a void function(void)
-	// with consumed global variables, within a busy loop.
+	// a12o: explict thread creation for customSwapBuffer as rendering_thread and screenlayout as manipulator_thread. Go on in a void function(void) 
+	// with consumed global variables, within a busy loop. Though this way was not applied as a solution at last.
 	while (i < times) {
 
-		drawClosuresOff(closures, count);		
+		drawClosuresOff(closures, count);
 		this_thread::sleep_for(chrono::milliseconds(blinkDuration));
 		SwapBuffers(*globalHDCPtr);
 		
@@ -132,6 +126,34 @@ void blinkClosures(short count,
 		
 		i++;
 	}
+	
+	readyToVanish = true;
 }
+
+void drawTriangle(Color color, float vx1, float vx2, float vx3, float vy1, float vy2, float vy3) {
+	float rc, gc, bc;
+	setColorTripleBases(color, rc, gc, bc);
+	glPushMatrix();
+	glBegin (GL_TRIANGLES);
+	glColor3f(rc, gc, bc); glVertex2f(vx1, vy1);
+	glColor3f(rc, gc, bc); glVertex2f(vx2, vy2);
+	glColor3f(rc, gc, bc); glVertex2f(vx3, vy3);
+	glEnd ();
+	glPopMatrix();
+	customSwapBuffers();
+}
+
+void showWinningSign(Color color) {
+	float vx1, vx2, vx3, vy1, vy2, vy3;
+	setUpTriangleCoords(vx1, vx2, vx3, vy1, vy2, vy3);
+	drawTriangle(color, vx1, vx2, vx3, vy1, vy2, vy3);
+}
+
+void showLossSign(Color color) {
+	float vx1, vx2, vx3, vy1, vy2, vy3;
+	setUpsideTriangleCoords(vx1, vx2, vx3, vy1, vy2, vy3);
+	drawTriangle(color, vx1, vx2, vx3, vy1, vy2, vy3);
+}
+
 
 #endif
