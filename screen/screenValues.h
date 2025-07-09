@@ -390,10 +390,9 @@ void disentangleClosures() {
 	} while (idx);
 }
 
-// todo: bugfix - First or Last vertical closure element remains intactly while it must have been removed, too.
-void dropAboveCells(short rwIdx, short clIdx) {
+bool dropAboveCells(short rwIdx, short clIdx) {
 	if (!marked[clIdx][rwIdx])
-		return;
+		return false;
 		
 	short hght = heights[clIdx], idx = rwIdx;
 	while (idx++ < hght) {
@@ -404,14 +403,23 @@ void dropAboveCells(short rwIdx, short clIdx) {
 		marked[clIdx][idx-1] = marked[clIdx][idx];
 	}
 	
+	if (idx == columnBoxNumbers) {
+		colors[clIdx][idx-1] = DARK;
+		marked[clIdx][idx-1] = false;
+	}
+	
 	heights[clIdx] = --hght;
-	colors[clIdx][hght-1] = colors[clIdx][idx-1] = DARK;
-	marked[clIdx][hght-1] = marked[clIdx][idx-1] = false;
+	colors[clIdx][hght] = DARK;
+	marked[clIdx][hght] = false;
+	return true;
 }
 
 void dropMarkedCells(short clIdx) {
-	for (short rwIdx = 0; rwIdx < columnBoxNumbers; rwIdx++) {
-		dropAboveCells(rwIdx, clIdx);
+	short rwIdx = 0, hght = heights[clIdx];
+	while (rwIdx < hght) {
+		if (!dropAboveCells(rwIdx, clIdx)) {
+			rwIdx++;
+		}
 	}
 }
 
