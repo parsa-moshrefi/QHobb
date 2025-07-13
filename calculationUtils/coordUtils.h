@@ -73,4 +73,32 @@ short max(short a, short b) {
 	return (a > b) ? a : b;
 }
 
+/***************************************************************************************************************
+ * In the next 6 functions rs[x|y][1|2] are rubber segment x or y pixel coordination of two diameter endpoints *
+ ***************************************************************************************************************/
+
+void coords_ld_Rbbr(short x, short y, float& rsx1, float &rsy1, float &rsx2, float &rsy2) {
+	// todo: impl
+}
+
+void coords_lu_Rbbr(short , short y, float &rsx1, float &rsy1, float &rsx2, float &rsy2) {
+	// todo: impl
+}
+
+void coords_rd_Rbbr(short x, short y, float &rsx1, float &rsy1, float &rsx2, float &rsy2)  {
+	// todo: impl
+}
+
+void coords_ru_Rbbr(short x, short y, float &rsx1, float &rsy1, float &rsx2, float &rsy2) {
+	// todo: impl
+}
+
+void coordsLeftRbbr(short x, short y, float &rsx1, float rsy1, float &rsx2, float &rsy2) {
+	// todo: impl
+}
+
+void coordsRightRbbr(short x, short y, float &rsx1, float &rsy1, float &rsx2, float &rsy2) {
+	// todo: impl
+}
+
 #endif
