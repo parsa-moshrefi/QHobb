@@ -155,5 +155,38 @@ void showLossSign(Color color) {
 	drawTriangle(color, vx1, vx2, vx3, vy1, vy2, vy3);
 }
 
+void drawRect(float vx1, float vy1, float rc, float gc, float bc) {
+	// todo: impl
+}
+
+void draw_ld_Rbbr(short x, short y, float rc, float gc, float bc) {
+	// todo : impl
+}
+
+void draw_lu_Rbbr(short x, short y, float rc, float gc, float bc) {
+	// todo : impl
+}
+
+void draw_rd_Rbbr(short x, short y, float rc, float gc, float bc) {
+	// todo : impl
+}
+
+void draw_ru_Rbbr(short x, short y, float rc, float gc, float bc) {
+	// todo : impl
+}
+
+void drawLeftRbbr(short x, short y, float rc, float gc, float bc) {
+	// todo : impl
+}
+
+void drawRightRbbr(short x, short y, float rc, float gc, float bc) {
+	// todo : impl
+}
+
+// A binary rubber for substituting its inside elements. X & Y are relatively cell coordinations of the left box inside rubber
+void drawRubber(short x, short y, Color color) {
+	// todo : impl
+}
+
 
 #endif
