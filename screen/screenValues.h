@@ -318,7 +318,7 @@ void allClosures() {
 		closures[i].closureColor = colors[coords[0].first][coords[0].second];
 		closures[i].closureCount = closureCount;
 		i++;
-	} while (i < maxClosuresNumber);
+	} while (i < maxClosuresNumber);	
 }
 
 short getNumberOfClosures() {
