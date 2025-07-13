@@ -38,7 +38,6 @@ void checkShowResult() {
 	}
 }
 
-// todo: debug, after vanishing all marked cells on each column, single one of them (either the lowest or the highest) still remains.
 void vanishClosures() {
 	short nc = getNumberOfClosures();
 	if (nc) {
@@ -65,7 +64,9 @@ void renderScreen() {
 		} 
 		else
 		{	
-			numberOfClosures = getNumberOfClosures();
+			if (numberOfClosures = getNumberOfClosures())
+				scoresUpdated = false;
+			
 			if (renderCount++ <= numberOfClosures || finished)
 				continue;
 				
@@ -73,8 +74,8 @@ void renderScreen() {
 			otr_cond_var.wait(otrlck, []() {
 				drawScreenLayout();
 				allClosures();
-				blinkClosures(numberOfClosures);				
-				updateTotalScore(numberOfClosures);
+				blinkClosures(numberOfClosures);
+				updateTotalScore(numberOfClosures);				
 				checkShowResult();				
 				return TRUE;
 			});
