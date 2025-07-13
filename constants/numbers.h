@@ -4,6 +4,8 @@
 #include <wingdi.h>
 using namespace std;
 
+enum Color { PURPLE = 1, YELLOW = 2, RED = 3, GREEN = 4, BLUE = 5, DARK = 6, WHITE = 7 };
+
 const short zero = 0;
 const short windowX = 600;
 const short windowY = 0;
@@ -56,7 +58,7 @@ const UINT swapFlag = WGL_SWAP_MAIN_PLANE | WGL_SWAP_OVERLAY1 | WGL_SWAP_OVERLAY
 	WGL_SWAP_UNDERLAY5 | WGL_SWAP_UNDERLAY6 | WGL_SWAP_UNDERLAY7 | WGL_SWAP_UNDERLAY8 |	WGL_SWAP_UNDERLAY9 | WGL_SWAP_UNDERLAY10 | 
 	WGL_SWAP_UNDERLAY11 | WGL_SWAP_UNDERLAY12 | WGL_SWAP_UNDERLAY13 | WGL_SWAP_UNDERLAY14 |	WGL_SWAP_UNDERLAY15;
 
-enum Color { PURPLE = 1, YELLOW = 2, RED = 3, GREEN = 4, BLUE = 5, DARK = 6, WHITE = 7 };
+const Color rubberColor = WHITE;
 
 int getRandomNumber(int min, int max) {
 	random_device rd;
