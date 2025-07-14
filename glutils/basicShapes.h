@@ -155,31 +155,31 @@ void showLossSign(Color color) {
 	drawTriangle(color, vx1, vx2, vx3, vy1, vy2, vy3);
 }
 
-void drawRect(float vx1, float vy1, float rc, float gc, float bc) {
+void drawRect(float rrx1, float rry1, float rrx2, float rry2, float rc, float gc, float bc) {
 	// todo: impl
 }
 
-void draw_ld_Rbbr(short x, short y, float rc, float gc, float bc) {
+void draw_ld_Rbbr(float vx1, float vy1, float rc, float gc, float bc) {
 	// todo : impl
 }
 
-void draw_lu_Rbbr(short x, short y, float rc, float gc, float bc) {
+void draw_lu_Rbbr(float vx1, float vy2, float rc, float gc, float bc) {
 	// todo : impl
 }
 
-void draw_rd_Rbbr(short x, short y, float rc, float gc, float bc) {
+void draw_rd_Rbbr(float vx2, float vy1, float rc, float gc, float bc) {
 	// todo : impl
 }
 
-void draw_ru_Rbbr(short x, short y, float rc, float gc, float bc) {
+void draw_ru_Rbbr(float vx2, float vy2, float rc, float gc, float bc) {
 	// todo : impl
 }
 
-void drawLeftRbbr(short x, short y, float rc, float gc, float bc) {
+void drawLeftRbbr(float vx1, float vy1, float vx2, float rc, float gc, float bc) {
 	// todo : impl
 }
 
-void drawRightRbbr(short x, short y, float rc, float gc, float bc) {
+void drawRightRbbr(float vx2, float vy1, float vy2, float rc, float gc, float bc) {
 	// todo : impl
 }
 
