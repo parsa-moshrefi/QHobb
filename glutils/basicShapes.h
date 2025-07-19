@@ -155,37 +155,95 @@ void showLossSign(Color color) {
 	drawTriangle(color, vx1, vx2, vx3, vy1, vy2, vy3);
 }
 
-void drawRect(float rrx1, float rry1, float rrx2, float rry2, float rc, float gc, float bc) {
-	// todo: impl
+/*
+ * Draws a basic rectangle with given coordinates of left & down - up & right vertexes and its filling color
+ */
+// todo: test
+void drawRect(float rrx1, float rry1, float rrx2, float rry2, float rc, float gc, float bc) {	
+	glPushMatrix();
+	glBegin(GL_QUADS);
+	glColor3f(rc, gc, bc); glVertex2f(rrx1, rry1);
+	glColor3f(rc, gc, bc); glVertex2f(rrx1, rry2);
+	glColor3f(rc, gc, bc); glVertex2f(rrx2, rry2);
+	glColor3f(rc, gc, bc); glVertex2f(rrx2, rry1);
+	glEnd();
+	glPopMatrix();
 }
 
-void draw_ld_Rbbr(float vx1, float vy1, float rc, float gc, float bc) {
-	// todo : impl
+/**
+ * Draws left and down extra piece of the rubber based on the corresponding vertex coordinates and filling color
+ */
+// todo : test
+void draw_ld_Rbbr(float vx1, float vy1, float rc, float gc, float bc) {	
+	float rrx1, rry1, rrx2, rry2;
+	coords_ld_Rbbr(vx1, vy1, rrx1, rry1, rrx2, rry2);
+	drawRect(rrx1, rry1, rrx2, rry2, rc, gc, bc);
 }
 
-void draw_lu_Rbbr(float vx1, float vy2, float rc, float gc, float bc) {
-	// todo : impl
+/**
+ * Draws left and up extra piece of the rubber based on the corresponding vertex coordinates and filling color
+ */
+// todo : test
+void draw_lu_Rbbr(float vx1, float vy2, float rc, float gc, float bc) {	
+	float rrx1, rry1, rrx2, rry2;
+	coords_lu_Rbbr(vx1, vy2, rrx1, rry1, rrx2, rry2);
+	drawRect(rrx1, rry1, rrx2, rry2, rc, gc, bc);
 }
 
-void draw_rd_Rbbr(float vx2, float vy1, float rc, float gc, float bc) {
-	// todo : impl
+/**
+ * Draws right and down extra peice of the rubber based on the corresponding vertex coordinates and filling color
+ */
+// todo : test
+void draw_rd_Rbbr(float vx2, float vy1, float rc, float gc, float bc) {	
+	float rrx1, rry1, rrx2, rry2;
+	coords_rd_Rbbr(vx2, vy1, rrx1, rry1, rrx2, rry2);
+	drawRect(rrx1, rry1, rrx2, rry2, rc, gc, bc);
 }
 
-void draw_ru_Rbbr(float vx2, float vy2, float rc, float gc, float bc) {
-	// todo : impl
+/**
+ * Draws right and up extra piece of the rubber based on the corresponding vertex coordinates and filling color
+ */
+// todo : test
+void draw_ru_Rbbr(float vx2, float vy2, float rc, float gc, float bc) {	
+	float rrx1, rry1, rrx2, rry2;
+	coords_ru_Rbbr(vx2, vy2, rrx1, rry1, rrx2, rry2);
+	drawRect(rrx1, rry1, rrx2, rry2, rc, gc, bc);
 }
 
-void drawLeftRbbr(float vx1, float vy1, float vx2, float rc, float gc, float bc) {
-	// todo : impl
+/**
+ * Draws left sid of the rubber based on left down - left up coordinates of the side and filling color
+ */
+// todo : test
+void drawLeftRbbr(float vx1, float vy1, float vy2, float rc, float gc, float bc) {	
+	float rrx1, rry1, rrx2, rry2;
+	coordsLeftRbbr(vx1, vy1, vy2, rrx1, rry1, rrx2, rry2);
+	drawRect(rrx1, rry1, rrx2, rry2, rc, gc, bc);
 }
 
-void drawRightRbbr(float vx2, float vy1, float vy2, float rc, float gc, float bc) {
-	// todo : impl
+/**
+ * Draws right side of the rubber based on right down - right up coordinates of the side and filling color
+ */
+// todo : test
+void drawRightRbbr(float vx2, float vy1, float vy2, float rc, float gc, float bc) {	
+	float rrx1, rry1, rrx2, rry2;
+	coordsRightRbbr(vx2, vy1, vy2, rrx1, rry1, rrx2, rry2);
+	drawRect(rrx1, rry1, rrx2, rry2, rc, gc, bc);
 }
 
-// A binary rubber for substituting its inside elements. X & Y are relatively cell coordinations of the left box inside rubber
+/** 
+ * Draws a binary rubber for substituting its inside elements. X & Y are relatively cell coordinations of the left box inside rubber
+ */
+// todo : test
 void drawRubber(short x, short y, Color color) {
-	// todo : impl
+	float vx1, vx2, vy1, vy2, rc, gc, bc;
+	calculateCoords(x, y, vx1, vx2, vy1, vy2);
+	setColorTripleBases(color, rc, gc, bc);
+	drawLeftRbbr(vx1, vy1, vy2, rc, gc, bc);
+	drawRightRbbr(vx2, vy1, y2, rc, gc, bc);
+	draw_ld_Rbbr(vx1, vy1, rc, gc, gc);
+	draw_lu_Rbbr(vx1, vy2, rc, gc, bc);
+	draw_rd_Rbbr(vx2, vy1, rc, gc, bc);
+	draw_ru_Rbbr(vx2, vy2, rc, gc, bc);
 }
 
 
