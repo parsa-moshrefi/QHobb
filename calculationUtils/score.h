@@ -3,6 +3,32 @@
 #include "coordUtils.h"
 #include "../constants/numbers.h"
 
+short getColorScore(Color color) {
+
+	switch (color) {
+		case PURPLE:
+			return purpleScore;
+			
+		case YELLOW:
+			return yellowScore;
+			
+		case RED:
+			return redScore;
+		
+		case GREEN:
+			return greenScore;
+			
+		case BLUE:
+			return blueScore;
+			
+		case DARK:
+			return darkScore;
+			
+		default:
+			return zero;
+	}
+}
+
 void updateTotalScore(short numberOfclosures) {
 	if (scoresUpdated)
 		return;
