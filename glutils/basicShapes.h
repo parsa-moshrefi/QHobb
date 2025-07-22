@@ -158,7 +158,6 @@ void showLossSign(Color color) {
 /*
  * Draws a basic rectangle with given coordinates of left & down - up & right vertexes and its filling color
  */
-// todo: test
 void drawRect(float rrx1, float rry1, float rrx2, float rry2, float rc, float gc, float bc) {	
 	glPushMatrix();
 	glBegin(GL_QUADS);
@@ -173,7 +172,6 @@ void drawRect(float rrx1, float rry1, float rrx2, float rry2, float rc, float gc
 /**
  * Draws left and down extra piece of the rubber based on the corresponding vertex coordinates and filling color
  */
-// todo : test
 void draw_ld_Rbbr(float vx1, float vy1, float rc, float gc, float bc) {	
 	float rrx1, rry1, rrx2, rry2;
 	coords_ld_Rbbr(vx1, vy1, rrx1, rry1, rrx2, rry2);
@@ -183,7 +181,6 @@ void draw_ld_Rbbr(float vx1, float vy1, float rc, float gc, float bc) {
 /**
  * Draws left and up extra piece of the rubber based on the corresponding vertex coordinates and filling color
  */
-// todo : test
 void draw_lu_Rbbr(float vx1, float vy2, float rc, float gc, float bc) {	
 	float rrx1, rry1, rrx2, rry2;
 	coords_lu_Rbbr(vx1, vy2, rrx1, rry1, rrx2, rry2);
@@ -193,7 +190,6 @@ void draw_lu_Rbbr(float vx1, float vy2, float rc, float gc, float bc) {
 /**
  * Draws right and down extra peice of the rubber based on the corresponding vertex coordinates and filling color
  */
-// todo : test
 void draw_rd_Rbbr(float vx2, float vy1, float rc, float gc, float bc) {	
 	float rrx1, rry1, rrx2, rry2;
 	coords_rd_Rbbr(vx2, vy1, rrx1, rry1, rrx2, rry2);
@@ -203,7 +199,6 @@ void draw_rd_Rbbr(float vx2, float vy1, float rc, float gc, float bc) {
 /**
  * Draws right and up extra piece of the rubber based on the corresponding vertex coordinates and filling color
  */
-// todo : test
 void draw_ru_Rbbr(float vx2, float vy2, float rc, float gc, float bc) {	
 	float rrx1, rry1, rrx2, rry2;
 	coords_ru_Rbbr(vx2, vy2, rrx1, rry1, rrx2, rry2);
@@ -213,7 +208,6 @@ void draw_ru_Rbbr(float vx2, float vy2, float rc, float gc, float bc) {
 /**
  * Draws left sid of the rubber based on left down - left up coordinates of the side and filling color
  */
-// todo : test
 void drawLeftRbbr(float vx1, float vy1, float vy2, float rc, float gc, float bc) {	
 	float rrx1, rry1, rrx2, rry2;
 	coordsLeftRbbr(vx1, vy1, vy2, rrx1, rry1, rrx2, rry2);
@@ -223,7 +217,6 @@ void drawLeftRbbr(float vx1, float vy1, float vy2, float rc, float gc, float bc)
 /**
  * Draws right side of the rubber based on right down - right up coordinates of the side and filling color
  */
-// todo : test
 void drawRightRbbr(float vx2, float vy1, float vy2, float rc, float gc, float bc) {	
 	float rrx1, rry1, rrx2, rry2;
 	coordsRightRbbr(vx2, vy1, vy2, rrx1, rry1, rrx2, rry2);
@@ -233,17 +226,22 @@ void drawRightRbbr(float vx2, float vy1, float vy2, float rc, float gc, float bc
 /** 
  * Draws a binary rubber for substituting its inside elements. X & Y are relatively cell coordinations of the left box inside rubber
  */
-// todo : test
 void drawRubber(short x, short y, Color color) {
-	float vx1, vx2, vy1, vy2, rc, gc, bc;
-	calculateCoords(x, y, vx1, vx2, vy1, vy2);
+	if (x < 0 || x >= rowBoxNumbers - 1 || y < 0 || y >= columnBoxNumbers)
+		return;
+		
+	float v1x1, v1x2, v2x1, v2x2, vy1, vy2, rc, gc, bc;
 	setColorTripleBases(color, rc, gc, bc);
-	drawLeftRbbr(vx1, vy1, vy2, rc, gc, bc);
-	drawRightRbbr(vx2, vy1, y2, rc, gc, bc);
-	draw_ld_Rbbr(vx1, vy1, rc, gc, gc);
-	draw_lu_Rbbr(vx1, vy2, rc, gc, bc);
-	draw_rd_Rbbr(vx2, vy1, rc, gc, bc);
-	draw_ru_Rbbr(vx2, vy2, rc, gc, bc);
+		
+	calculateCoords(x, y, v1x1, v1x2, vy1, vy2);
+	drawLeftRbbr(v1x1, vy1, vy2, rc, gc, bc);
+	draw_ld_Rbbr(v1x1, vy1, rc, gc, bc);
+	draw_lu_Rbbr(v1x1, vy2, rc, gc, bc);
+
+	calculateCoords(x+1, y, v2x1, v2x2, vy1, vy2);
+	drawRightRbbr(v2x2, vy1, vy2, rc, gc, bc);
+	draw_rd_Rbbr(v2x2, vy1, rc, gc, bc);
+	draw_ru_Rbbr(v2x2, vy2, rc, gc, bc);
 }
 
 
