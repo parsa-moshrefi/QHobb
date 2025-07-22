@@ -8,9 +8,9 @@ void calculateCoords(short x, short y, float &vx1, float &vx2, float &vy1, float
 	short xCoeff = x - (rowBoxNumbers / 2);
 	short yCoeff = y - (columnBoxNumbers / 2);
 	vx1 = xCoeff * (sideHorizontalLength + rubberHThickness);
-	vy1 = yCoeff * (sideVerticalLength + rubberVThickness);
-	vx2 = xCoeff * (sideHorizontalLength + rubberHThickness) + sideHorizontalLength;
-	vy2 = yCoeff * (sideVerticalLength + rubberVThickness) + sideVerticalLength;
+	vy1 = yCoeff * (sideVerticalLength + rubberVThickness) + nrwVCoeff * rubberVThickness;
+	vx2 = vx1 + sideHorizontalLength;
+	vy2 = vy1 + sideVerticalLength;
 }
 
 void setUpTriangleCoords(float &vx1, float &vx2, float &vx3, float &vy1, float &vy2, float &vy3) {
@@ -80,10 +80,9 @@ short max(short a, short b) {
 /**
  * Sets coordinates of left and down extra piece of rubber
  */
-// todo: test
 void coords_ld_Rbbr(float vx1, float vy1, float& rrx1, float &rry1, float &rrx2, float &rry2) {
-	rrx1 = vx1 - hbrr - rubberHThickness;
-	rry1 = vy1 - vbrr - rubberVThickness;
+	rrx1 = vx1 - hbrr - rubberHThickness * nrwHCoeff;
+	rry1 = vy1 - vbrr - rubberVThickness * nrwVCoeff;
 	rrx2 = vx1 + exCoeff * rubberHThickness;
 	rry2 = vy1 - vbrr;
 }
@@ -91,56 +90,51 @@ void coords_ld_Rbbr(float vx1, float vy1, float& rrx1, float &rry1, float &rrx2,
 /**
  * Sets coordinates of left and up extra piece of rubber
  */
-// todo: test
 void coords_lu_Rbbr(float vx1, float vy2, float &rrx1, float &rry1, float &rrx2, float &rry2) {
-	rrx1 = vx1 - hbrr - rubberHThickness;
+	rrx1 = vx1 - hbrr - rubberHThickness * nrwHCoeff;
 	rry1 = vy2 + vbrr;
 	rrx2 = vx1 + exCoeff * rubberHThickness;
-	rry2 = vy2 + vbrr + rubberVThickness;
+	rry2 = vy2 + vbrr + rubberVThickness * nrwVCoeff;
 }
 
 /**
  * Sets coordinates of rught and down extra piece of rubber
  */
-// todo: test
 void coords_rd_Rbbr(float vx2, float vy1, float &rrx1, float &rry1, float &rrx2, float &rry2)  {
 	rrx1 = vx2 - exCoeff * rubberHThickness;
-	rry1 = vy1 - vbrr - rubberVThickness;
-	rrx2 = vx2 + hbrr + rubberHThickness;
+	rry1 = vy1 - vbrr - rubberVThickness * nrwVCoeff;
+	rrx2 = vx2 + hbrr + rubberHThickness * nrwHCoeff;
 	rry2 = vy1 - vbrr;
 }
 
 /**
  * Sets coordinates of right and up extra piece of rubber
  */
-// todo: test
 void coords_ru_Rbbr(float vx2, float vy2, float &rrx1, float &rry1, float &rrx2, float &rry2) {
 	rrx1 = vx2 - exCoeff * rubberHThickness;
 	rry1 = vy2 + vbrr;
-	rrx2 = vx2 + hbrr + rubberHThickness;
-	rry2 = vy2 + vbrr + rubberVThickness;
+	rrx2 = vx2 + hbrr + rubberHThickness * nrwHCoeff;
+	rry2 = vy2 + vbrr + rubberVThickness * nrwVCoeff;
 }
 
 /**
  * Sets coordinates of left side of the rubber
  */
-// todo: test
-void coordsLeftRbbr(float vx1, float vy1, float vy2, float &rrx1, float rry1, float &rrx2, float &rry2) {
-	rrx1 = vx1 - hbrr - rubberHThickness;
-	rry1 = vy1 + vbrr;
+void coordsLeftRbbr(float vx1, float vy1, float vy2, float &rrx1, float& rry1, float &rrx2, float &rry2) {
+	rrx1 = vx1 - hbrr - rubberHThickness * nrwHCoeff;
+	rry1 = vy1 - vbrr;
 	rrx2 = vx1 - hbrr;
-	rry2 = vy2 - vbrr;
+	rry2 = vy2 + vbrr;
 }
 
 /**
  * Sets coordinates of right side of the rubber
  */
-// todo: test
 void coordsRightRbbr(float vx2, float vy1, float vy2, float &rrx1, float &rry1, float &rrx2, float &rry2) {	
 	rrx1 = vx2 + hbrr;
-	rry1 = vy1 + vbrr;
-	rrx2 = vx2 + hbrr + rubberHThickness;
-	rry2 = vy2 - vbrr;
+	rry1 = vy1 - vbrr;
+	rrx2 = vx2 + hbrr + rubberHThickness * nrwHCoeff;
+	rry2 = vy2 + vbrr;
 }
 
 #endif
