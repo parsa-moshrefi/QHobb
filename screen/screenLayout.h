@@ -18,6 +18,7 @@ void drawScreenLayout() {
 		}		
 	}
 	
+	drawRubber(initRbbrX, initRbbrY, WHITE);
 	SwapBuffers(*globalHDCPtr);
 	customFlush();
 }
