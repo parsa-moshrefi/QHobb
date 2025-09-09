@@ -226,23 +226,26 @@ void drawRightRbbr(float vx2, float vy1, float vy2, float rc, float gc, float bc
 /** 
  * Draws a binary rubber for substituting its inside elements. X & Y are relatively cell coordinations of the left box inside rubber
  */
-void drawRubber(short x, short y, Color color) {
-	if (x < 0 || x >= rowBoxNumbers - 1 || y < 0 || y >= columnBoxNumbers)
+void drawRubber(Color color) {
+	if (rbbrx < 0 || rbbrx >= rowBoxNumbers - 1 || rbbry < 0 || rbbry >= columnBoxNumbers)
 		return;
 		
 	float v1x1, v1x2, v2x1, v2x2, vy1, vy2, rc, gc, bc;
 	setColorTripleBases(color, rc, gc, bc);
 		
-	calculateCoords(x, y, v1x1, v1x2, vy1, vy2);
+	calculateCoords(rbbrx, rbbry, v1x1, v1x2, vy1, vy2);
 	drawLeftRbbr(v1x1, vy1, vy2, rc, gc, bc);
 	draw_ld_Rbbr(v1x1, vy1, rc, gc, bc);
 	draw_lu_Rbbr(v1x1, vy2, rc, gc, bc);
 
-	calculateCoords(x+1, y, v2x1, v2x2, vy1, vy2);
+	calculateCoords(rbbrx+1, rbbry, v2x1, v2x2, vy1, vy2);
 	drawRightRbbr(v2x2, vy1, vy2, rc, gc, bc);
 	draw_rd_Rbbr(v2x2, vy1, rc, gc, bc);
 	draw_ru_Rbbr(v2x2, vy2, rc, gc, bc);
 }
 
+void eraseRubber() {
+	drawRubber(DARK);
+}
 
 #endif
