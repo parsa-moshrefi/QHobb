@@ -4,6 +4,7 @@
 #include "../calculationUtils/score.h"
 #include "../glutils/basicShapes.h"
 #include "../glutils/libUtils.h"
+#include "../glutils/windowUtil.h"
 #include <list>
 #include <utility>
 using namespace std;
@@ -18,7 +19,7 @@ void drawScreenLayout() {
 		}		
 	}
 	
-	drawRubber(initRbbrX, initRbbrY, WHITE);
+	drawRubber(WHITE);
 	SwapBuffers(*globalHDCPtr);
 	customFlush();
 }
@@ -55,14 +56,15 @@ void renderScreen() {
 		if (PeekMessage (&msg, NULL, 0, 0, PM_REMOVE)) {
 			if (msg.message == WM_QUIT) {
 				bQuit = TRUE;
-				freeResources();				
+				freeResources();
 	 		}
 			else 
 			{
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
+				kbQHBFunc();				
 			}
-		} 
+		}
 		else
 		{	
 			if (numberOfClosures = getNumberOfClosures())
@@ -77,14 +79,14 @@ void renderScreen() {
 				allClosures();
 				blinkClosures(numberOfClosures);
 				updateTotalScore(numberOfClosures);				
-				checkShowResult();				
-				return TRUE;
+				checkShowResult();
+				doActions();
+				clearKBStat();				
+				return TRUE;	
 			});
 			
 			if (readyToVanish) {
 				vanishClosures();
-				/* todo: kbhit or some other way for checking arrows in order to move the rubber or space so as to substitute adjacent boxes or x for
-				   halting optionally. */
 				// todo: randomly append some boxes on the board.
 			}
 		}
