@@ -327,32 +327,6 @@ short getNumberOfClosures() {
 	return i-1;
 }
 
-short getColorScore(Color color) {
-
-	switch (color) {
-		case PURPLE:
-			return purpleScore;
-			
-		case YELLOW:
-			return yellowScore;
-			
-		case RED:
-			return redScore;
-		
-		case GREEN:
-			return greenScore;
-			
-		case BLUE:
-			return blueScore;
-			
-		case DARK:
-			return darkScore;
-			
-		default:
-			return zero;
-	}
-}
-
 void clearClosure(ClosureHolder *chPtr) {
 	short ccnt = chPtr->closureCount;
 	chPtr->closureColor = DARK;
