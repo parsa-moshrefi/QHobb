@@ -24,6 +24,7 @@ using namespace std;
 #include <unistd.h>
 #include <tlhelp32.h>
 #include <iostream>
+#include <winuser.h>
 
 #include "../constants/numbers.h"
 #include "../constants/types.h"
@@ -51,10 +52,17 @@ ClosureHolder *closures;
 BOOL bQuit;
 MSG msg;
 int totalScore = 0;
+DIRECTION direction = NONE;
+bool rubberMoved = false;
+bool doSwap = false;
+short rbbrx = initRbbrX;
+short rbbry = initRbbrY;
 
 LRESULT CALLBACK WndProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 void EnableOpenGL (HWND hWnd, HDC *hDC, HGLRC *hRC);
 void DisableOpenGL (HWND hWnd, HDC hDC, HGLRC hRC);
+
+// wash the code - FILE *scrd, ncrd;
 
 /*******************************************************************************************************
  * Platform angostically forces current process avoid creating additional threads and processor affinity
@@ -175,7 +183,7 @@ void EnableOpenGL (HWND hWnd, HDC *hDC, HGLRC *hRC)
     /* create and enable the render context (RC) */
     globalHDCPtr = hDC;
 	*hRC = wglCreateContext( *hDC );
-    wglMakeCurrent( *hDC, *hRC );	
+    wglMakeCurrent( *hDC, *hRC );
 }
 
 
