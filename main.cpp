@@ -15,7 +15,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
     HDC hDC;
     HGLRC hRC;
     bQuit = FALSE;
-	
+    
 	/* set number of threads on omp; Although opengl internally creates additional threads. */
 	char ompEnv[] = "OMP_NUM_THREADS=1";
 	putenv(ompEnv);
@@ -30,7 +30,7 @@ int WINAPI WinMain (HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLin
 	initScreenVals();
 	setScreenColors();
 	renderScreen();
-	
+
 	/* shutdown OpenGL */
     DisableOpenGL (hWnd, hDC, hRC);
 
