@@ -5,6 +5,7 @@
 using namespace std;
 
 enum Color { PURPLE = 1, YELLOW = 2, RED = 3, GREEN = 4, BLUE = 5, DARK = 6, WHITE = 7 };
+enum DIRECTION { LEFT = 1, UP = 2, RIGHT = 3, DOWN = 4, NONE = 5 };
 
 const short zero = 0;
 const short windowX = 600;
@@ -66,6 +67,16 @@ const UINT swapFlag = WGL_SWAP_MAIN_PLANE | WGL_SWAP_OVERLAY1 | WGL_SWAP_OVERLAY
 	WGL_SWAP_UNDERLAY11 | WGL_SWAP_UNDERLAY12 | WGL_SWAP_UNDERLAY13 | WGL_SWAP_UNDERLAY14 |	WGL_SWAP_UNDERLAY15;
 
 const Color rubberColor = WHITE;
+const UINT amsg1 = 257;
+const UINT amsg2 = 256;
+const UINT wsMsg1 = 257;
+const UINT wsMsg2 = 256;
+const UINT wsMsg3 = 258;
+const WPARAM lawParam = 37;
+const WPARAM uawParam = 38;
+const WPARAM rawParam = 39;
+const WPARAM dawParam = 40;
+const WPARAM wswParam = 32;
 
 int getRandomNumber(int min, int max) {
 	random_device rd;
